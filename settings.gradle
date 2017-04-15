@@ -1,1 +1,1 @@
-include ':sample', ':library'
+include ':activity-factory-sample', ':activity-factory-library'
