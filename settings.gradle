@@ -1,1 +1,3 @@
-include ':activity-factory-sample', ':activity-factory-library'
+include ':sample', ':activity-factory'
+
+rootProject.name = "activity-factory-project"
