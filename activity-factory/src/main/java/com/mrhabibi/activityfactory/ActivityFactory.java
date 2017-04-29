@@ -22,7 +22,7 @@ import static com.mrhabibi.activityfactory.BasicActivity.FRAGMENT_GETTER_ID_LABE
 
 public class ActivityFactory {
 
-    public final static String TAG = "ActivityFactory";
+    final static String TAG = "ActivityFactory";
 
     /**
      * Builder instantiator with an activity Class as initialization, this is the simplest way if
