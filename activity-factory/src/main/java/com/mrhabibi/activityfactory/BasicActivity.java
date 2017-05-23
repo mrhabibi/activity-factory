@@ -19,6 +19,7 @@ import android.util.Log;
 public abstract class BasicActivity extends AppCompatActivity {
 
     public final static String FRAGMENT_GETTER_ID_LABEL = "fragmentGetterId";
+    public final static String FRAGMENT_TAG = "fragmentTag";
 
     protected boolean mFirstCreation;
     protected String mFragmentGetterId;
@@ -29,29 +30,34 @@ public abstract class BasicActivity extends AppCompatActivity {
         mFirstCreation = savedInstanceState == null;
         extractBundleStates(getIntent().getExtras());
         super.onCreate(savedInstanceState);
+        if (mFirstCreation) {
+            mCurrentFragment = getActiveFragment();
+        } else {
+            mCurrentFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        }
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        if (injectFragmentContainerRes() <= 0) {
+            return;
+        }
+
         /*
          * Bring the fragment to live
          */
-        FragmentManager fragmentManager = getSupportFragmentManager();
         if (mFirstCreation) {
-            mCurrentFragment = getActiveFragment();
-
             if (findViewById(injectFragmentContainerRes()) == null) {
                 throw new IllegalStateException("Fragment container resource id not found, are you sure the id passed in injectFragmentContainerRes() is correct?");
             }
 
+            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(injectFragmentContainerRes(), mCurrentFragment)
+                    .replace(injectFragmentContainerRes(), mCurrentFragment, FRAGMENT_TAG)
                     .commit();
             fragmentManager.executePendingTransactions();
-        } else {
-            mCurrentFragment = fragmentManager.findFragmentById(injectFragmentContainerRes());
         }
 
         /*
@@ -92,18 +98,6 @@ public abstract class BasicActivity extends AppCompatActivity {
      */
     @IdRes
     protected abstract int injectFragmentContainerRes();
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(FRAGMENT_GETTER_ID_LABEL, mFragmentGetterId);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        extractBundleStates(savedInstanceState);
-    }
 
     /**
      * Pass the activity result for nested PersistentDialog

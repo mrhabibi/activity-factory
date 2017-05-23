@@ -9,7 +9,7 @@ An activity generator for one-fragment-in-one-activity architecture to decrease 
 Add this line in your `build.gradle` file:
 
 ```
-compile 'com.mrhabibi:activity-factory:1.0.0'
+compile 'com.mrhabibi:activity-factory:1.0.2'
 ```
 
 This library is hosted in the [JCenter repository](https://bintray.com/mrhabibi/maven), so you have to ensure that the repository is included:
