@@ -41,6 +41,10 @@ public abstract class BasicActivity extends AppCompatActivity {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        if (isFinishing()) {
+            return;
+        }
+
         if (injectFragmentContainerRes() <= 0) {
             return;
         }
