@@ -17,9 +17,4 @@ public class HostActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host);
     }
-
-    @Override
-    protected int injectFragmentContainerRes() {
-        return R.id.framelayout_container;
-    }
 }

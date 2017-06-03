@@ -1,4 +1,4 @@
-[ ![Download](https://api.bintray.com/packages/mrhabibi/maven/activity-factory/images/download.svg?version=1.0.0) ](https://bintray.com/mrhabibi/maven/activity-factory/1.0.0/link)
+[ ![Download](https://api.bintray.com/packages/mrhabibi/maven/activity-factory/images/download.svg) ](https://bintray.com/mrhabibi/maven/activity-factory/_latestVersion)
 # Activity Factory
 An activity generator for one-fragment-in-one-activity architecture to decrease code duplication of activity and to define the activity style standard easily for Android
 
@@ -9,7 +9,7 @@ An activity generator for one-fragment-in-one-activity architecture to decrease 
 Add this line in your `build.gradle` file:
 
 ```
-compile 'com.mrhabibi:activity-factory:1.0.3'
+compile 'com.mrhabibi:activity-factory:1.0.4'
 ```
 
 This library is hosted in the [JCenter repository](https://bintray.com/mrhabibi/maven), so you have to ensure that the repository is included:

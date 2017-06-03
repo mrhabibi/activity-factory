@@ -3,11 +3,14 @@ package com.mrhabibi.activityfactory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by mrhabibi on 4/28/17.
@@ -37,31 +40,30 @@ public abstract class BasicActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        attachFragment();
+    }
 
-        if (isFinishing()) {
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        attachFragment();
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+        attachFragment();
+    }
+
+    protected void attachFragment() {
+
+        if (findViewById(R.id.fragment_container) == null) {
+            Log.e(ActivityFactory.TAG, "Fragment container resource id not found, have you included @id/fragment_container inside you activity content view?");
             return;
-        }
-
-        if (injectFragmentContainerRes() <= 0) {
-            return;
-        }
-
-        /*
-         * Bring the fragment to live
-         */
-        if (mFirstCreation) {
-            if (findViewById(injectFragmentContainerRes()) == null) {
-                throw new IllegalStateException("Fragment container resource id not found, are you sure the id passed in injectFragmentContainerRes() is correct?");
-            }
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(injectFragmentContainerRes(), mCurrentFragment, FRAGMENT_TAG)
-                    .commit();
-            fragmentManager.executePendingTransactions();
         }
 
         /*
@@ -71,6 +73,17 @@ public abstract class BasicActivity extends AppCompatActivity {
             Log.e(ActivityFactory.TAG, "Finishing due to Expired Session");
             finish();
             return;
+        }
+
+        /*
+         * Bring the fragment to live
+         */
+        if (mFirstCreation) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, mCurrentFragment, FRAGMENT_TAG)
+                    .commit();
+            fragmentManager.executePendingTransactions();
         }
 
         onFragmentAttached(mCurrentFragment);
@@ -94,14 +107,6 @@ public abstract class BasicActivity extends AppCompatActivity {
     protected Fragment getActiveFragment() {
         return FragmentPasser.getFragment(mFragmentGetterId);
     }
-
-    /**
-     * Resource id of view inside activity to be used as fragment container
-     *
-     * @return The resource id
-     */
-    @IdRes
-    protected abstract int injectFragmentContainerRes();
 
     /**
      * Pass the activity result for nested PersistentDialog
