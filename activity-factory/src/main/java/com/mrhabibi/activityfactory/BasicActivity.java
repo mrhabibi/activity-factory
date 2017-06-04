@@ -33,10 +33,19 @@ public abstract class BasicActivity extends AppCompatActivity {
         mFirstCreation = savedInstanceState == null;
         extractBundleStates(getIntent().getExtras());
         super.onCreate(savedInstanceState);
+
         if (mFirstCreation) {
             mCurrentFragment = getActiveFragment();
         } else {
             mCurrentFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
+        }
+
+        /*
+         * Check if the fragment has expired
+         */
+        if (mFragmentGetterId != null && mCurrentFragment == null) {
+            Log.e(ActivityFactory.TAG, "Finishing due to Expired Session");
+            finish();
         }
     }
 
@@ -63,15 +72,6 @@ public abstract class BasicActivity extends AppCompatActivity {
 
         if (findViewById(R.id.fragment_container) == null) {
             Log.e(ActivityFactory.TAG, "Fragment container resource id not found, have you included @id/fragment_container inside you activity content view?");
-            return;
-        }
-
-        /*
-         * Check if the fragment has expired
-         */
-        if (mFragmentGetterId != null && mCurrentFragment == null) {
-            Log.e(ActivityFactory.TAG, "Finishing due to Expired Session");
-            finish();
             return;
         }
 
