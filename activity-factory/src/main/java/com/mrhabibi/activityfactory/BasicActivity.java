@@ -2,7 +2,6 @@ package com.mrhabibi.activityfactory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -53,25 +52,25 @@ public abstract class BasicActivity extends AppCompatActivity {
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
-        attachFragment();
+        onAttachFragment();
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
-        attachFragment();
+        onAttachFragment();
     }
 
     @Override
     public void setContentView(View view, ViewGroup.LayoutParams params) {
         super.setContentView(view, params);
-        attachFragment();
+        onAttachFragment();
     }
 
-    protected void attachFragment() {
+    protected void onAttachFragment() {
 
         if (findViewById(R.id.fragment_container) == null) {
-            Log.e(ActivityFactory.TAG, "Fragment container resource id not found, have you included @id/fragment_container inside you activity content view?");
+            Log.e(ActivityFactory.TAG, "Fragment container resource id not found, have you included FrameLayout with @id/fragment_container inside your activity content view?");
             return;
         }
 
@@ -85,17 +84,6 @@ public abstract class BasicActivity extends AppCompatActivity {
                     .commit();
             fragmentManager.executePendingTransactions();
         }
-
-        onFragmentAttached(mCurrentFragment);
-    }
-
-    /**
-     * Method that will be called after fragment attached to the container, you can override it
-     * and add your own logic
-     *
-     * @param fragment The attached fragment
-     */
-    protected void onFragmentAttached(Fragment fragment) {
     }
 
     /**
