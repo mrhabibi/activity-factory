@@ -69,15 +69,13 @@ public abstract class BasicActivity extends AppCompatActivity {
 
     protected void onAttachFragment() {
 
-        if (findViewById(R.id.fragment_container) == null) {
-            Log.e(ActivityFactory.TAG, "Fragment container resource id not found, have you included FrameLayout with @id/fragment_container inside your activity content view?");
-            return;
-        }
-
         /*
          * Bring the fragment to live
          */
-        if (mFirstCreation) {
+        if (mFirstCreation && mCurrentFragment != null) {
+            if (findViewById(R.id.fragment_container) == null) {
+                throw new IllegalStateException("Fragment container resource id not found, have you included FrameLayout with @id/fragment_container inside your activity content view?");
+            }
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, mCurrentFragment, FRAGMENT_TAG)
